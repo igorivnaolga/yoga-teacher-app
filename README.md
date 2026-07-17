@@ -29,8 +29,10 @@ npm run ios        # Open on iOS
 npm run web        # Open in browser
 npm test           # Run tests once
 npm run test:watch # Run tests in watch mode
+npm run typecheck  # TypeScript check
 ```
 
-## Step 1 status
+## Current features
 
-App shell with tabs: **Plans**, **Calendar**, **Courses**, **Library**. Theme tokens, shared UI, and smoke tests are in place. Domain features come in later steps.
+- App shell with tabs: **Plans**, **Calendar**, **Courses**, **Library**
+- **Pose library**: searchable seeded catalog with category filters and pose detail

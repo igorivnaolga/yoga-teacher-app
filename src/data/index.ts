@@ -1,2 +1,1 @@
-/** Persistence adapters (SQLite repositories, seed data) live here. */
-export {};
+export { createPoseRepository, poseRepository, type PoseRepository } from './repositories/poseRepository';
