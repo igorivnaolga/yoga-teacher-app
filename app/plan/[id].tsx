@@ -12,7 +12,8 @@ import {
   View,
 } from 'react-native';
 
-import { poseRepository } from '@/data';
+import { poseRepository, taughtSessionRepository } from '@/data';
+import { toDateKey } from '@/domain/taughtSession';
 import { PoseListItem, PoseSearchBar } from '@/features/library';
 import { LevelPicker, PlanItemRow, useClassPlanEditor } from '@/features/plans';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
@@ -27,6 +28,7 @@ export default function ClassPlanEditorScreen() {
   const theme = colors[scheme];
   const [pickerOpen, setPickerOpen] = useState(false);
   const [poseSearch, setPoseSearch] = useState('');
+  const [markingTaught, setMarkingTaught] = useState(false);
 
   const editor = useClassPlanEditor({ planId: id });
   const poseChoices = poseRepository.list({ search: poseSearch });
@@ -39,6 +41,31 @@ export default function ClassPlanEditorScreen() {
     if (saved) {
       router.back();
     }
+  };
+
+  const onMarkTaughtToday = () => {
+    if (!id || editor.isNew) return;
+    Alert.alert('Mark as taught', 'Log this plan as taught today?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log today',
+        onPress: () => {
+          setMarkingTaught(true);
+          void taughtSessionRepository
+            .create({ classPlanId: id, date: toDateKey(new Date()) })
+            .then(() => {
+              Alert.alert('Logged', 'This class was added to your teaching calendar.');
+            })
+            .catch((err) => {
+              Alert.alert(
+                'Could not log',
+                err instanceof Error ? err.message : 'Something went wrong.',
+              );
+            })
+            .finally(() => setMarkingTaught(false));
+        },
+      },
+    ]);
   };
 
   const onDelete = () => {
@@ -194,17 +221,36 @@ export default function ClassPlanEditorScreen() {
           </Pressable>
 
           {!editor.isNew ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Delete class plan"
-              onPress={onDelete}
-              style={({ pressed }) => [
-                styles.deleteButton,
-                { borderColor: theme.danger, opacity: pressed ? 0.8 : 1 },
-              ]}
-            >
-              <Text style={[styles.deleteLabel, { color: theme.danger }]}>Delete plan</Text>
-            </Pressable>
+            <>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Mark class plan as taught today"
+                onPress={onMarkTaughtToday}
+                disabled={markingTaught}
+                style={({ pressed }) => [
+                  styles.secondaryButtonWide,
+                  {
+                    borderColor: theme.tint,
+                    opacity: markingTaught ? 0.6 : pressed ? 0.8 : 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.secondaryWideLabel, { color: theme.tint }]}>
+                  {markingTaught ? 'Logging…' : 'Mark as taught today'}
+                </Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Delete class plan"
+                onPress={onDelete}
+                style={({ pressed }) => [
+                  styles.deleteButton,
+                  { borderColor: theme.danger, opacity: pressed ? 0.8 : 1 },
+                ]}
+              >
+                <Text style={[styles.deleteLabel, { color: theme.danger }]}>Delete plan</Text>
+              </Pressable>
+            </>
           ) : null}
         </ScrollView>
       </Screen>
@@ -303,6 +349,16 @@ const styles = StyleSheet.create({
   },
   secondaryLabel: {
     ...typography.caption,
+    fontWeight: '600',
+  },
+  secondaryButtonWide: {
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+  },
+  secondaryWideLabel: {
+    ...typography.body,
     fontWeight: '600',
   },
   items: {
