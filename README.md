@@ -6,6 +6,7 @@ Mobile app for yoga teachers to plan classes, log what they taught, keep sequenc
 
 - React Native (Expo) + TypeScript
 - Expo Router
+- AsyncStorage for local class-plan persistence
 - Jest + React Native Testing Library
 
 ## Project structure
@@ -36,3 +37,4 @@ npm run typecheck  # TypeScript check
 
 - App shell with tabs: **Plans**, **Calendar**, **Courses**, **Library**
 - **Pose library**: searchable seeded catalog with category filters and pose detail
+- **Class plans**: create/edit/delete plans, add poses, reorder sequence, local persistence

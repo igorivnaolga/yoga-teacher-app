@@ -54,6 +54,7 @@ function RootLayoutNav() {
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="pose/[id]" options={{ title: 'Pose' }} />
+        <Stack.Screen name="plan/[id]" options={{ title: 'Class plan' }} />
       </Stack>
     </>
   );
