@@ -1,4 +1,6 @@
+import { CATEGORY_LABELS } from './types';
 import type { Pose, PoseQuery } from './types';
+import { poseHasCategory } from './categories';
 
 function normalize(value: string): string {
   return value.trim().toLowerCase();
@@ -10,7 +12,8 @@ function matchesSearch(pose: Pose, search: string): boolean {
     return true;
   }
 
-  const haystack = [pose.name, pose.sanskrit ?? '', pose.category, ...pose.tags, pose.cues ?? '']
+  const categoryText = pose.categories.map((category) => CATEGORY_LABELS[category]).join(' ');
+  const haystack = [pose.name, pose.sanskrit ?? '', categoryText, ...pose.tags, pose.cues ?? '']
     .join(' ')
     .toLowerCase();
 
@@ -25,7 +28,7 @@ export function filterPoses(poses: readonly Pose[], query: PoseQuery = {}): Pose
   const search = query.search ?? '';
 
   return poses.filter((pose) => {
-    if (category && pose.category !== category) {
+    if (category && !poseHasCategory(pose, category)) {
       return false;
     }
     if (difficulty && pose.difficulty !== difficulty) {

@@ -1,5 +1,5 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { type ReactNode, useState } from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +22,7 @@ import {
   useClassPlanEditor,
   useVarietyInsights,
 } from '@/features/plans';
+import { consumeQueuedPlanPose } from '@/features/plans/pendingPlanPose';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { colors, palette, spacing, typography } from '@/shared/theme';
 import { EmptyState } from '@/shared/ui/EmptyState';
@@ -39,7 +40,24 @@ export default function ClassPlanEditorScreen() {
   const editor = useClassPlanEditor({ planId: id });
   const draftPoseIds = editor.draft.items.map((item) => item.poseId);
   const variety = useVarietyInsights(draftPoseIds);
-  const poseChoices = poseRepository.list({ search: poseSearch });
+  const [poseCatalogVersion, setPoseCatalogVersion] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      void poseRepository.ready().then(() => {
+        setPoseCatalogVersion((value) => value + 1);
+        const queuedPoseId = consumeQueuedPlanPose();
+        if (queuedPoseId && poseRepository.getById(queuedPoseId)) {
+          editor.addPose(queuedPoseId);
+        }
+      });
+    }, [editor.addPose]),
+  );
+
+  const poseChoices = useMemo(
+    () => poseRepository.list({ search: poseSearch }),
+    [poseSearch, poseCatalogVersion],
+  );
 
   const fieldError = (field: string) =>
     editor.validationErrors.find((error) => error.field === field)?.message;
@@ -280,6 +298,28 @@ export default function ClassPlanEditorScreen() {
           </View>
           <View style={styles.pickerSearch}>
             <PoseSearchBar value={poseSearch} onChangeText={setPoseSearch} />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Create custom pose"
+              onPress={() => {
+                const typedName = poseSearch.trim();
+                setPickerOpen(false);
+                setPoseSearch('');
+                router.push({
+                  pathname: '/pose/manage/[id]',
+                  params: {
+                    id: 'new',
+                    returnToPlan: id ?? 'new',
+                    ...(typedName ? { initialName: typedName } : {}),
+                  },
+                });
+              }}
+              style={[styles.createPoseButton, { borderColor: theme.tint }]}
+            >
+              <Text style={[styles.createPoseLabel, { color: theme.tint }]}>
+                Create custom pose
+              </Text>
+            </Pressable>
           </View>
           <ScrollView contentContainerStyle={styles.pickerList}>
             {poseChoices.map((pose) => (
@@ -413,6 +453,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  createPoseButton: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: spacing.sm + 2,
+    alignItems: 'center',
+    marginTop: spacing.sm,
+  },
+  createPoseLabel: {
+    ...typography.caption,
+    fontWeight: '700',
   },
   pickerSearch: {
     paddingHorizontal: spacing.lg,

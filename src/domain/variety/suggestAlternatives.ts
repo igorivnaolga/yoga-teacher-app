@@ -8,7 +8,10 @@ function scoreCandidate(
   recentCounts: ReadonlyMap<string, number>,
 ): number {
   let score = 0;
-  if (candidate.category === source.category) score += 3;
+  const sharedCategories = candidate.categories.filter((category) =>
+    source.categories.includes(category),
+  ).length;
+  score += sharedCategories * 3;
   const sharedTags = candidate.tags.filter((tag) => source.tags.includes(tag)).length;
   score += sharedTags;
   if (candidate.difficulty === source.difficulty) score += 1;

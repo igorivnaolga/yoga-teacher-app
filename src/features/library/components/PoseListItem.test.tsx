@@ -8,7 +8,7 @@ const pose: Pose = {
   id: 'tree',
   name: 'Tree Pose',
   sanskrit: 'Vrksasana',
-  category: 'balance',
+  categories: ['balance'],
   difficulty: 'beginner',
   tags: ['balance'],
 };

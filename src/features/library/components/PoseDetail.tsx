@@ -16,7 +16,7 @@ export function PoseDetail({ pose }: PoseDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <PoseIcon category={pose.category} size="lg" />
+        <PoseIcon category={pose.categories[0]} size="lg" />
         <View style={styles.headerCopy}>
           <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
           {pose.sanskrit ? (
@@ -26,8 +26,11 @@ export function PoseDetail({ pose }: PoseDetailProps) {
       </View>
 
       <View style={styles.metaRow}>
-        <MetaPill label={CATEGORY_LABELS[pose.category]} />
+        {pose.categories.map((category) => (
+          <MetaPill key={category} label={CATEGORY_LABELS[category]} />
+        ))}
         <MetaPill label={pose.difficulty} />
+        {pose.custom ? <MetaPill label="Custom" /> : null}
       </View>
 
       {pose.cues ? (

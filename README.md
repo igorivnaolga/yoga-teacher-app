@@ -36,7 +36,7 @@ npm run typecheck  # TypeScript check
 ## Current features
 
 - App shell with tabs: **Plans**, **Calendar**, **Courses**, **Library**
-- **Pose library**: searchable seeded catalog with category filters, pose detail, and category icons
+- **Pose library**: searchable seeded catalog with category filters, pose detail, category marks, and custom poses (saved locally)
 - **Class plans**: create/edit/delete plans, add poses, reorder sequence, local persistence
 - **Teaching calendar**: month view, log taught classes by day, recently taught list
 - **Variety helper**: compares ordered sequences against past classes on the same weekday (poses may repeat; repeated order is flagged)

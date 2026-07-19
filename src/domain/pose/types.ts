@@ -23,10 +23,27 @@ export type Pose = {
   id: string;
   name: string;
   sanskrit?: string;
-  category: PoseCategory;
+  /** One or more categories (seed poses usually have one). */
+  categories: PoseCategory[];
   difficulty: PoseDifficulty;
   tags: string[];
   cues?: string;
+  /** True for user-created poses (seed catalog poses omit this). */
+  custom?: boolean;
+};
+
+export type PoseDraft = {
+  name: string;
+  sanskrit?: string;
+  categories: PoseCategory[];
+  difficulty: PoseDifficulty;
+  tags: string[];
+  cues?: string;
+};
+
+export type PoseValidationError = {
+  field: 'name' | 'categories' | 'difficulty' | 'tags' | 'cues' | 'sanskrit';
+  message: string;
 };
 
 export type PoseQuery = {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { poseRepository } from '@/data';
 import {
@@ -14,6 +14,25 @@ export type CategoryFilter = PoseCategory | 'all';
 export function usePoseLibrary() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<CategoryFilter>('all');
+  const [ready, setReady] = useState(false);
+  const [version, setVersion] = useState(0);
+
+  const refresh = useCallback(() => {
+    setVersion((value) => value + 1);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    void poseRepository.ready().then(() => {
+      if (active) {
+        setReady(true);
+        refresh();
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [refresh]);
 
   const query: PoseQuery = useMemo(
     () => ({
@@ -23,8 +42,12 @@ export function usePoseLibrary() {
     [search, category],
   );
 
-  const poses: Pose[] = useMemo(() => poseRepository.list(query), [query]);
-  const totalCount = poseRepository.count();
+  const poses: Pose[] = useMemo(() => {
+    if (!ready) return [];
+    return poseRepository.list(query);
+  }, [query, ready, version]);
+
+  const totalCount = ready ? poseRepository.count() : 0;
 
   const categories = useMemo(
     () =>
@@ -44,5 +67,7 @@ export function usePoseLibrary() {
     poses,
     totalCount,
     resultCount: poses.length,
+    ready,
+    refresh,
   };
 }

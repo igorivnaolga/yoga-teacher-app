@@ -28,14 +28,16 @@ export function PoseListItem({ pose, onPress }: PoseListItemProps) {
         },
       ]}
     >
-      <PoseIcon category={pose.category} size="md" />
+      <PoseIcon category={pose.categories[0]} size="md" />
       <View style={styles.copy}>
         <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
         {pose.sanskrit ? (
           <Text style={[styles.sanskrit, { color: theme.textMuted }]}>{pose.sanskrit}</Text>
         ) : null}
         <Text style={[styles.meta, { color: theme.tintMuted }]}>
-          {CATEGORY_LABELS[pose.category]} · {pose.difficulty}
+          {pose.categories.map((category) => CATEGORY_LABELS[category]).join(', ')} ·{' '}
+          {pose.difficulty}
+          {pose.custom ? ' · Custom' : ''}
         </Text>
       </View>
       <Text style={[styles.chevron, { color: theme.textMuted }]}>›</Text>

@@ -1,6 +1,8 @@
-import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { poseRepository } from '@/data';
 import {
   CategoryChips,
   PoseListItem,
@@ -8,7 +10,7 @@ import {
   usePoseLibrary,
 } from '@/features/library';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
-import { colors, spacing, typography } from '@/shared/theme';
+import { colors, palette, spacing, typography } from '@/shared/theme';
 import { EmptyState } from '@/shared/ui/EmptyState';
 import { Screen } from '@/shared/ui/Screen';
 
@@ -16,12 +18,38 @@ export default function LibraryScreen() {
   const router = useRouter();
   const scheme = useColorScheme();
   const theme = colors[scheme];
-  const { search, setSearch, category, setCategory, categories, poses, resultCount, totalCount } =
-    usePoseLibrary();
+  const {
+    search,
+    setSearch,
+    category,
+    setCategory,
+    categories,
+    poses,
+    resultCount,
+    totalCount,
+    refresh,
+  } = usePoseLibrary();
+
+  useFocusEffect(
+    useCallback(() => {
+      void poseRepository.ready().then(() => refresh());
+    }, [refresh]),
+  );
 
   return (
     <Screen padded={false}>
       <View style={styles.header}>
+        <View style={styles.titleRow}>
+          <Text style={[styles.heading, { color: theme.text }]}>Pose library</Text>
+          <Pressable
+            onPress={() => router.push('/pose/manage/new')}
+            style={[styles.addButton, { backgroundColor: theme.tint }]}
+            accessibilityRole="button"
+            accessibilityLabel="Add custom pose"
+          >
+            <Text style={styles.addLabel}>Add pose</Text>
+          </Pressable>
+        </View>
         <PoseSearchBar value={search} onChangeText={setSearch} />
         <CategoryChips options={categories} selected={category} onSelect={setCategory} />
         <Text style={[styles.count, { color: theme.textMuted }]}>
@@ -37,7 +65,7 @@ export default function LibraryScreen() {
         ListEmptyComponent={
           <EmptyState
             title="No poses found"
-            message="Try another search term or clear the category filter."
+            message="Try another search term, clear the category filter, or add a custom pose."
           />
         }
         renderItem={({ item }) => (
@@ -56,6 +84,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     gap: spacing.md,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.md,
+  },
+  heading: {
+    ...typography.heading,
+    fontSize: 22,
+    flex: 1,
+  },
+  addButton: {
+    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  addLabel: {
+    ...typography.caption,
+    color: palette.white,
+    fontWeight: '700',
   },
   count: {
     ...typography.caption,

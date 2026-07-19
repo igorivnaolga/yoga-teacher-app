@@ -14,7 +14,7 @@ import {
   type ClassPlanLevel,
   type ClassPlanValidationError,
 } from '@/domain/classPlan';
-import type { PoseCategory } from '@/domain/pose';
+import { primaryCategory, type PoseCategory } from '@/domain/pose';
 
 function createItemId(): string {
   return `item_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
@@ -101,7 +101,7 @@ export function useClassPlanEditor({ planId }: UseClassPlanEditorOptions) {
           ...item,
           poseName: pose?.name ?? 'Unknown pose',
           poseSanskrit: pose?.sanskrit,
-          poseCategory: pose?.category,
+          poseCategory: pose ? primaryCategory(pose) : undefined,
         };
       }),
     [draft.items],

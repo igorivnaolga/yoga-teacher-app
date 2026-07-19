@@ -6,7 +6,7 @@ const samplePoses: Pose[] = [
     id: 'tree',
     name: 'Tree Pose',
     sanskrit: 'Vrksasana',
-    category: 'balance',
+    categories: ['balance'],
     difficulty: 'beginner',
     tags: ['balance', 'hips', 'focus'],
     cues: 'Soft gaze.',
@@ -15,7 +15,7 @@ const samplePoses: Pose[] = [
     id: 'crow',
     name: 'Crow Pose',
     sanskrit: 'Bakasana',
-    category: 'arm_balance',
+    categories: ['arm_balance'],
     difficulty: 'intermediate',
     tags: ['arm-balance', 'core', 'strength'],
   },
@@ -23,7 +23,7 @@ const samplePoses: Pose[] = [
     id: 'child',
     name: "Child's Pose",
     sanskrit: 'Balasana',
-    category: 'restorative',
+    categories: ['restorative', 'forward_fold'],
     difficulty: 'beginner',
     tags: ['restorative', 'calming', 'hips'],
   },
@@ -36,6 +36,12 @@ describe('filterPoses', () => {
 
   it('filters by category', () => {
     expect(filterPoses(samplePoses, { category: 'balance' }).map((p) => p.id)).toEqual(['tree']);
+  });
+
+  it('matches when any selected category is present', () => {
+    expect(filterPoses(samplePoses, { category: 'forward_fold' }).map((p) => p.id)).toEqual([
+      'child',
+    ]);
   });
 
   it('filters by difficulty', () => {

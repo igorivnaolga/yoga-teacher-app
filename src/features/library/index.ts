@@ -1,8 +1,11 @@
 export { CategoryChips } from './components/CategoryChips';
+export { CategoryPicker } from './components/CategoryPicker';
+export { DifficultyPicker } from './components/DifficultyPicker';
 export { PoseCategoryIcon } from './components/PoseCategoryIcon';
 export { PoseDetail } from './components/PoseDetail';
 export { PoseIcon } from './components/PoseIcon';
 export { PoseListItem } from './components/PoseListItem';
 export { PoseSearchBar } from './components/PoseSearchBar';
+export { usePoseEditor } from './hooks/usePoseEditor';
 export { usePoseLibrary } from './hooks/usePoseLibrary';
 export { CATEGORY_MARKS, getCategoryMark } from './poseIcons';
