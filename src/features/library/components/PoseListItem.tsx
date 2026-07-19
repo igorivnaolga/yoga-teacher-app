@@ -28,7 +28,7 @@ export function PoseListItem({ pose, onPress }: PoseListItemProps) {
         },
       ]}
     >
-      <PoseIcon poseId={pose.id} category={pose.category} size="md" />
+      <PoseIcon category={pose.category} size="md" />
       <View style={styles.copy}>
         <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
         {pose.sanskrit ? (

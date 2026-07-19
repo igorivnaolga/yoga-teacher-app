@@ -16,7 +16,7 @@ export function PoseDetail({ pose }: PoseDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <PoseIcon poseId={pose.id} category={pose.category} size="lg" />
+        <PoseIcon category={pose.category} size="lg" />
         <View style={styles.headerCopy}>
           <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
           {pose.sanskrit ? (

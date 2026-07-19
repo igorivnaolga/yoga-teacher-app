@@ -31,7 +31,7 @@ export function PlanItemRow({
     <View style={[styles.row, { backgroundColor: theme.surface, borderColor: theme.border }]}>
       <View style={styles.copy}>
         <Text style={[styles.order, { color: theme.tintMuted }]}>{index + 1}</Text>
-        <PoseIcon poseId={item.poseId} category={item.poseCategory} size="sm" />
+        <PoseIcon category={item.poseCategory} size="sm" />
         <View style={styles.textBlock}>
           <Text style={[styles.name, { color: theme.text }]}>{item.poseName}</Text>
           {item.poseSanskrit ? (

@@ -1,29 +1,26 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import type { PoseCategory } from '@/domain/pose';
-import { StickFigureSvg, resolvePoseArt } from '@/features/library/poseArt';
-import { getPoseIconName } from '@/features/library/poseIcons';
+import { getCategoryMark } from '@/features/library/poseIcons';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
-import { colors } from '@/shared/theme';
+import { colors, typography } from '@/shared/theme';
 
 type PoseIconProps = {
-  poseId: string;
   category?: PoseCategory;
   size?: 'sm' | 'md' | 'lg';
 };
 
 const SIZE_MAP = {
-  sm: { box: 32, figure: 26, icon: 16, stroke: 2.4 },
-  md: { box: 40, figure: 32, icon: 20, stroke: 2.25 },
-  lg: { box: 56, figure: 46, icon: 28, stroke: 2.1 },
+  sm: { box: 32, fontSize: 11 },
+  md: { box: 40, fontSize: 13 },
+  lg: { box: 56, fontSize: 16 },
 } as const;
 
-export function PoseIcon({ poseId, category, size = 'md' }: PoseIconProps) {
+/** Category badge shown next to poses (no vector-icon font). */
+export function PoseIcon({ category, size = 'md' }: PoseIconProps) {
   const scheme = useColorScheme();
   const theme = colors[scheme];
   const dims = SIZE_MAP[size];
-  const art = resolvePoseArt(poseId);
 
   return (
     <View
@@ -39,20 +36,9 @@ export function PoseIcon({ poseId, category, size = 'md' }: PoseIconProps) {
         },
       ]}
     >
-      {art.kind === 'svg' ? (
-        <StickFigureSvg
-          joints={art.joints}
-          color={theme.tint}
-          size={dims.figure}
-          strokeWidth={dims.stroke}
-        />
-      ) : (
-        <Ionicons
-          name={getPoseIconName(poseId, category)}
-          size={dims.icon}
-          color={theme.tint}
-        />
-      )}
+      <Text style={[styles.mark, { color: theme.tint, fontSize: dims.fontSize }]}>
+        {getCategoryMark(category)}
+      </Text>
     </View>
   );
 }
@@ -61,6 +47,9 @@ const styles = StyleSheet.create({
   badge: {
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
+  },
+  mark: {
+    ...typography.caption,
+    fontWeight: '700',
   },
 });

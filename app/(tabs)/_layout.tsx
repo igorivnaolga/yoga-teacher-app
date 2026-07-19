@@ -1,24 +1,22 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import type { ComponentProps } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 import { useClientOnlyValue } from '@/shared/hooks/useClientOnlyValue';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { APP_TABS, type AppTabName } from '@/shared/navigation/tabs';
-import { colors } from '@/shared/theme';
+import { colors, typography } from '@/shared/theme';
 
-type IconName = ComponentProps<typeof FontAwesome>['name'];
-
-function TabBarIcon({ name, color }: { name: IconName; color: string }) {
-  return <FontAwesome size={22} style={{ marginBottom: -2 }} name={name} color={color} />;
-}
-
-const tabIcons: Record<AppTabName, IconName> = {
-  index: 'list-alt',
-  calendar: 'calendar',
-  courses: 'graduation-cap',
-  library: 'book',
+/** System-font marks — avoids @expo/vector-icons FontFaceObserver timeouts on web. */
+const tabMarks: Record<AppTabName, string> = {
+  index: 'Pl',
+  calendar: 'Ca',
+  courses: 'Co',
+  library: 'Li',
 };
+
+function TabBarMark({ mark, color }: { mark: string; color: string }) {
+  return <Text style={[styles.mark, { color }]}>{mark}</Text>;
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -47,7 +45,7 @@ export default function TabLayout() {
           options={{
             title: tab.title,
             tabBarIcon: ({ color }) => (
-              <TabBarIcon name={tabIcons[tab.name]} color={String(color)} />
+              <TabBarMark mark={tabMarks[tab.name]} color={String(color)} />
             ),
           }}
         />
@@ -55,3 +53,12 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  mark: {
+    ...typography.caption,
+    fontWeight: '700',
+    fontSize: 13,
+    marginBottom: -2,
+  },
+});

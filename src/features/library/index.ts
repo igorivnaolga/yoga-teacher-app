@@ -5,5 +5,4 @@ export { PoseIcon } from './components/PoseIcon';
 export { PoseListItem } from './components/PoseListItem';
 export { PoseSearchBar } from './components/PoseSearchBar';
 export { usePoseLibrary } from './hooks/usePoseLibrary';
-export { getPoseIconName, POSE_ICONS } from './poseIcons';
-export { hasPoseIllustration, resolvePoseArt, StickFigureSvg } from './poseArt';
+export { CATEGORY_MARKS, getCategoryMark } from './poseIcons';
