@@ -15,7 +15,13 @@ import {
 import { poseRepository, taughtSessionRepository } from '@/data';
 import { toDateKey } from '@/domain/taughtSession';
 import { PoseListItem, PoseSearchBar } from '@/features/library';
-import { LevelPicker, PlanItemRow, useClassPlanEditor } from '@/features/plans';
+import {
+  LevelPicker,
+  PlanItemRow,
+  VarietyPanel,
+  useClassPlanEditor,
+  useVarietyInsights,
+} from '@/features/plans';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { colors, palette, spacing, typography } from '@/shared/theme';
 import { EmptyState } from '@/shared/ui/EmptyState';
@@ -31,6 +37,8 @@ export default function ClassPlanEditorScreen() {
   const [markingTaught, setMarkingTaught] = useState(false);
 
   const editor = useClassPlanEditor({ planId: id });
+  const draftPoseIds = editor.draft.items.map((item) => item.poseId);
+  const variety = useVarietyInsights(draftPoseIds);
   const poseChoices = poseRepository.list({ search: poseSearch });
 
   const fieldError = (field: string) =>
@@ -160,6 +168,13 @@ export default function ClassPlanEditorScreen() {
               ]}
             />
           </Field>
+
+          <VarietyPanel
+            analysis={variety.analysis}
+            matchSummaries={variety.matchSummaries}
+            hasHistory={variety.hasHistory}
+            loading={variety.loading}
+          />
 
           <View style={styles.sequenceHeader}>
             <Text style={[styles.sectionTitle, { color: theme.text }]}>Sequence</Text>

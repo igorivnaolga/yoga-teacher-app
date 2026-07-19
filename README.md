@@ -39,3 +39,4 @@ npm run typecheck  # TypeScript check
 - **Pose library**: searchable seeded catalog with category filters and pose detail
 - **Class plans**: create/edit/delete plans, add poses, reorder sequence, local persistence
 - **Teaching calendar**: month view, log taught classes by day, recently taught list
+- **Variety helper**: compares ordered sequences against past classes on the same weekday (poses may repeat; repeated order is flagged)
