@@ -31,12 +31,13 @@ npm run web        # Open in browser
 npm test           # Run tests once
 npm run test:watch # Run tests in watch mode
 npm run typecheck  # TypeScript check
+npm run generate:pose-art  # Regenerate stick-figure layouts from scripts/generatePoseSkeletons.mjs
 ```
 
 ## Current features
 
 - App shell with tabs: **Plans**, **Calendar**, **Courses**, **Library**
-- **Pose library**: searchable seeded catalog with category filters and pose detail
+- **Pose library**: searchable seeded catalog with category filters, pose detail, and sage stick-figure illustrations for every pose
 - **Class plans**: create/edit/delete plans, add poses, reorder sequence, local persistence
 - **Teaching calendar**: month view, log taught classes by day, recently taught list
 - **Variety helper**: compares ordered sequences against past classes on the same weekday (poses may repeat; repeated order is flagged)

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { CATEGORY_LABELS, type Pose } from '@/domain/pose';
+import { PoseIcon } from '@/features/library/components/PoseIcon';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { colors, spacing, typography } from '@/shared/theme';
 
@@ -14,10 +15,15 @@ export function PoseDetail({ pose }: PoseDetailProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
-      {pose.sanskrit ? (
-        <Text style={[styles.sanskrit, { color: theme.textMuted }]}>{pose.sanskrit}</Text>
-      ) : null}
+      <View style={styles.header}>
+        <PoseIcon poseId={pose.id} category={pose.category} size="lg" />
+        <View style={styles.headerCopy}>
+          <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
+          {pose.sanskrit ? (
+            <Text style={[styles.sanskrit, { color: theme.textMuted }]}>{pose.sanskrit}</Text>
+          ) : null}
+        </View>
+      </View>
 
       <View style={styles.metaRow}>
         <MetaPill label={CATEGORY_LABELS[pose.category]} />
@@ -63,13 +69,21 @@ const styles = StyleSheet.create({
   container: {
     gap: spacing.md,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  headerCopy: {
+    flex: 1,
+    gap: 2,
+  },
   name: {
     ...typography.title,
   },
   sanskrit: {
     ...typography.body,
     fontStyle: 'italic',
-    marginTop: -spacing.sm,
   },
   metaRow: {
     flexDirection: 'row',

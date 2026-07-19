@@ -11,7 +11,8 @@
     "web:stable": "cross-env CHOKIDAR_USEPOLLING=1 expo start --web --clear --port 8082",
     "test": "jest",
     "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:pose-art": "node scripts/generatePoseSkeletons.mjs"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -31,6 +32,7 @@
     "react-native-reanimated": "4.5.0",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
+    "react-native-svg": "15.15.4",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.10.0"
   },

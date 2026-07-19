@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { PoseIcon } from '@/features/library/components/PoseIcon';
 import type { PlanEditorItem } from '@/features/plans/hooks/useClassPlanEditor';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { colors, spacing, typography } from '@/shared/theme';
@@ -30,6 +31,7 @@ export function PlanItemRow({
     <View style={[styles.row, { backgroundColor: theme.surface, borderColor: theme.border }]}>
       <View style={styles.copy}>
         <Text style={[styles.order, { color: theme.tintMuted }]}>{index + 1}</Text>
+        <PoseIcon poseId={item.poseId} category={item.poseCategory} size="sm" />
         <View style={styles.textBlock}>
           <Text style={[styles.name, { color: theme.text }]}>{item.poseName}</Text>
           {item.poseSanskrit ? (
@@ -91,13 +93,12 @@ const styles = StyleSheet.create({
   copy: {
     flexDirection: 'row',
     gap: spacing.sm,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   order: {
     ...typography.caption,
     fontWeight: '700',
     minWidth: 20,
-    marginTop: 2,
   },
   textBlock: {
     flex: 1,

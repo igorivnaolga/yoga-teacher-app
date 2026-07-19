@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CATEGORY_LABELS, type Pose } from '@/domain/pose';
+import { PoseIcon } from '@/features/library/components/PoseIcon';
 import { useColorScheme } from '@/shared/hooks/useColorScheme';
 import { colors, spacing, typography } from '@/shared/theme';
 
@@ -27,6 +28,7 @@ export function PoseListItem({ pose, onPress }: PoseListItemProps) {
         },
       ]}
     >
+      <PoseIcon poseId={pose.id} category={pose.category} size="md" />
       <View style={styles.copy}>
         <Text style={[styles.name, { color: theme.text }]}>{pose.name}</Text>
         {pose.sanskrit ? (
