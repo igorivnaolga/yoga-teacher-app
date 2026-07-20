@@ -40,3 +40,4 @@ npm run typecheck  # TypeScript check
 - **Class plans**: create/edit/delete plans, add poses, reorder sequence, local persistence
 - **Teaching calendar**: month view, log taught classes by day, recently taught list
 - **Variety helper**: compares ordered sequences against past classes on the same weekday (poses may repeat; repeated order is flagged)
+- **Courses**: multi-session paths that link existing class plans in order, with labels and reordering

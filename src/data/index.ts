@@ -3,6 +3,11 @@ export {
   createClassPlanRepository,
   type ClassPlanRepository,
 } from './repositories/classPlanRepository';
+export {
+  courseRepository,
+  createCourseRepository,
+  type CourseRepository,
+} from './repositories/courseRepository';
 export { createPoseRepository, poseRepository, type PoseRepository } from './repositories/poseRepository';
 export {
   createTaughtSessionRepository,
