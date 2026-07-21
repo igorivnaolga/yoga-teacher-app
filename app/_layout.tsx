@@ -30,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="pose/manage/[id]" options={{ title: 'Custom pose' }} />
         <Stack.Screen name="plan/[id]" options={{ title: 'Class plan' }} />
         <Stack.Screen name="course/[id]" options={{ title: 'Course' }} />
+        <Stack.Screen name="backup" options={{ title: 'Backup' }} />
       </Stack>
     </>
   );

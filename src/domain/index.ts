@@ -1,3 +1,4 @@
+export * from './backup';
 export * from './classPlan';
 export * from './course';
 export * from './pose';

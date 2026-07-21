@@ -16,6 +16,7 @@ export type ClassPlanRepository = {
   create: (draft: ClassPlanDraft, id?: string) => Promise<ClassPlan>;
   update: (id: string, draft: ClassPlanDraft) => Promise<ClassPlan>;
   remove: (id: string) => Promise<void>;
+  replaceAll: (plans: readonly ClassPlan[]) => Promise<void>;
   clear: () => Promise<void>;
 };
 
@@ -73,6 +74,10 @@ export function createClassPlanRepository(store: KeyValueStore = asyncStorageSto
     async remove(id) {
       const plans = await readAll();
       await writeAll(plans.filter((plan) => plan.id !== id));
+    },
+
+    async replaceAll(plans) {
+      await writeAll([...plans]);
     },
 
     async clear() {

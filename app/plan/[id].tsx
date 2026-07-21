@@ -94,6 +94,14 @@ export default function ClassPlanEditorScreen() {
     ]);
   };
 
+  const onDuplicate = () => {
+    void editor.duplicate().then((copy) => {
+      if (copy) {
+        router.replace(`/plan/${copy.id}`);
+      }
+    });
+  };
+
   const onDelete = () => {
     Alert.alert('Delete plan', 'This cannot be undone.', [
       { text: 'Cancel', style: 'cancel' },
@@ -270,6 +278,23 @@ export default function ClassPlanEditorScreen() {
               >
                 <Text style={[styles.secondaryWideLabel, { color: theme.tint }]}>
                   {markingTaught ? 'Logging…' : 'Mark as taught today'}
+                </Text>
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Duplicate class plan"
+                onPress={onDuplicate}
+                disabled={editor.duplicating}
+                style={({ pressed }) => [
+                  styles.secondaryButtonWide,
+                  {
+                    borderColor: theme.tint,
+                    opacity: editor.duplicating ? 0.6 : pressed ? 0.8 : 1,
+                  },
+                ]}
+              >
+                <Text style={[styles.secondaryWideLabel, { color: theme.tint }]}>
+                  {editor.duplicating ? 'Duplicating…' : 'Duplicate plan'}
                 </Text>
               </Pressable>
               <Pressable

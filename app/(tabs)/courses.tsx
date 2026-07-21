@@ -56,7 +56,7 @@ export default function CoursesScreen() {
           ListEmptyComponent={
             <EmptyState
               title="No courses yet"
-              message="Create a course, add class plans as sessions, and reorder the path."
+              message="Create a course, add class plans as sessions, and reorder the path. Need an existing plan first."
             />
           }
           renderItem={({ item }) => (

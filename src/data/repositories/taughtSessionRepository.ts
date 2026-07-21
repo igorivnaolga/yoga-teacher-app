@@ -20,6 +20,7 @@ export type TaughtSessionRepository = {
   listRecent: (limit?: number) => Promise<TaughtSession[]>;
   create: (draft: TaughtSessionDraft, id?: string) => Promise<TaughtSession>;
   remove: (id: string) => Promise<void>;
+  replaceAll: (sessions: readonly TaughtSession[]) => Promise<void>;
   clear: () => Promise<void>;
 };
 
@@ -79,6 +80,10 @@ export function createTaughtSessionRepository(
     async remove(id) {
       const sessions = await readAll();
       await writeAll(sessions.filter((session) => session.id !== id));
+    },
+
+    async replaceAll(sessions) {
+      await writeAll([...sessions]);
     },
 
     async clear() {

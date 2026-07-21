@@ -5,6 +5,11 @@ export {
   type CreateClassPlanInput,
 } from './createClassPlan';
 export {
+  draftFromClassPlan,
+  duplicateClassPlanDraft,
+  duplicateTitle,
+} from './duplicateClassPlan';
+export {
   appendItem,
   moveItemDown,
   moveItemUp,

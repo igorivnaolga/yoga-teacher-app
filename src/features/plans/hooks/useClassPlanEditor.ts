@@ -4,6 +4,8 @@ import { classPlanRepository, poseRepository } from '@/data';
 import {
   appendItem,
   createClassPlanItem,
+  draftFromClassPlan,
+  duplicateClassPlanDraft,
   moveItemDown,
   moveItemUp,
   removeItemAt,
@@ -31,17 +33,6 @@ function emptyDraft(): ClassPlanDraft {
   };
 }
 
-function draftFromPlan(plan: ClassPlan): ClassPlanDraft {
-  return {
-    title: plan.title,
-    level: plan.level,
-    durationMinutes: plan.durationMinutes,
-    theme: plan.theme ?? '',
-    notes: plan.notes ?? '',
-    items: plan.items,
-  };
-}
-
 export type PlanEditorItem = ClassPlanItem & {
   poseName: string;
   poseSanskrit?: string;
@@ -57,6 +48,7 @@ export function useClassPlanEditor({ planId }: UseClassPlanEditorOptions) {
   const [draft, setDraft] = useState<ClassPlanDraft>(emptyDraft());
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
+  const [duplicating, setDuplicating] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<ClassPlanValidationError[]>([]);
@@ -78,7 +70,7 @@ export function useClassPlanEditor({ planId }: UseClassPlanEditorOptions) {
           setLoadError('Class plan not found.');
           return;
         }
-        setDraft(draftFromPlan(plan));
+        setDraft(draftFromClassPlan(plan));
       })
       .catch((err) => {
         if (!active) return;
@@ -161,12 +153,32 @@ export function useClassPlanEditor({ planId }: UseClassPlanEditorOptions) {
     return true;
   }, [isNew, planId]);
 
+  const duplicate = useCallback(async (): Promise<ClassPlan | null> => {
+    if (isNew) return null;
+    setDuplicating(true);
+    setSaveError(null);
+    try {
+      const plan = await classPlanRepository.getById(planId);
+      if (!plan) {
+        setSaveError('Class plan not found.');
+        return null;
+      }
+      return await classPlanRepository.create(duplicateClassPlanDraft(plan, createItemId));
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Failed to duplicate plan.');
+      return null;
+    } finally {
+      setDuplicating(false);
+    }
+  }, [isNew, planId]);
+
   return {
     isNew,
     draft,
     items,
     loading,
     saving,
+    duplicating,
     loadError,
     saveError,
     validationErrors,
@@ -181,5 +193,6 @@ export function useClassPlanEditor({ planId }: UseClassPlanEditorOptions) {
     removeAt,
     save,
     remove,
+    duplicate,
   };
 }

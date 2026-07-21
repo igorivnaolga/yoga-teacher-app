@@ -16,6 +16,7 @@ export type CourseRepository = {
   create: (draft: CourseDraft, id?: string) => Promise<Course>;
   update: (id: string, draft: CourseDraft) => Promise<Course>;
   remove: (id: string) => Promise<void>;
+  replaceAll: (courses: readonly Course[]) => Promise<void>;
   clear: () => Promise<void>;
 };
 
@@ -73,6 +74,10 @@ export function createCourseRepository(
     async remove(id) {
       const courses = await readAll();
       await writeAll(courses.filter((course) => course.id !== id));
+    },
+
+    async replaceAll(courses) {
+      await writeAll([...courses]);
     },
 
     async clear() {

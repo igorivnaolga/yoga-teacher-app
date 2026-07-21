@@ -1,3 +1,4 @@
+export { backupService, createBackupService, type BackupRepositories } from './backup/backupService';
 export {
   classPlanRepository,
   createClassPlanRepository,

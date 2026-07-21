@@ -26,17 +26,30 @@ export default function PlansScreen() {
         <Text style={[styles.subtitle, { color: theme.textMuted }]}>
           Build sequences you can teach and refine over time.
         </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Create class plan"
-          onPress={() => router.push('/plan/new')}
-          style={({ pressed }) => [
-            styles.createButton,
-            { backgroundColor: theme.tint, opacity: pressed ? 0.85 : 1 },
-          ]}
-        >
-          <Text style={styles.createLabel}>New plan</Text>
-        </Pressable>
+        <View style={styles.actions}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Create class plan"
+            onPress={() => router.push('/plan/new')}
+            style={({ pressed }) => [
+              styles.createButton,
+              { backgroundColor: theme.tint, opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <Text style={styles.createLabel}>New plan</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Backup and restore"
+            onPress={() => router.push('/backup')}
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              { borderColor: theme.border, opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <Text style={[styles.secondaryLabel, { color: theme.text }]}>Backup</Text>
+          </Pressable>
+        </View>
       </View>
 
       {loading ? (
@@ -56,7 +69,7 @@ export default function PlansScreen() {
           ListEmptyComponent={
             <EmptyState
               title="No class plans yet"
-              message="Create your first plan, add poses from the library, and reorder the sequence."
+              message="Create a plan, add poses from the library, and reorder the sequence. You can also restore a JSON backup."
             />
           }
           renderItem={({ item }) => (
@@ -80,6 +93,11 @@ const styles = StyleSheet.create({
   subtitle: {
     ...typography.body,
   },
+  actions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
   createButton: {
     alignSelf: 'flex-start',
     borderRadius: 999,
@@ -89,6 +107,17 @@ const styles = StyleSheet.create({
   createLabel: {
     ...typography.body,
     color: palette.white,
+    fontWeight: '600',
+  },
+  secondaryButton: {
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm + 2,
+  },
+  secondaryLabel: {
+    ...typography.body,
     fontWeight: '600',
   },
   list: {

@@ -41,3 +41,5 @@ npm run typecheck  # TypeScript check
 - **Teaching calendar**: month view, log taught classes by day, recently taught list
 - **Variety helper**: compares ordered sequences against past classes on the same weekday (poses may repeat; repeated order is flagged)
 - **Courses**: multi-session paths that link existing class plans in order, with labels and reordering
+- **Duplicate plan**: copy an existing class plan with a new id and “(copy)” title
+- **Backup / restore**: export all local data as JSON (clipboard or share) and restore from clipboard

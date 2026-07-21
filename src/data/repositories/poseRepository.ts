@@ -29,6 +29,7 @@ function asNormalizedPoses(data: unknown): Pose[] {
 export type PoseRepository = {
   ready: () => Promise<void>;
   list: (query?: PoseQuery) => Pose[];
+  listCustom: () => Pose[];
   getById: (id: string) => Pose | undefined;
   listTags: () => string[];
   count: () => number;
@@ -36,6 +37,7 @@ export type PoseRepository = {
   createCustom: (draft: PoseDraft) => Promise<Pose>;
   updateCustom: (id: string, draft: PoseDraft) => Promise<Pose>;
   removeCustom: (id: string) => Promise<void>;
+  replaceCustom: (poses: readonly Pose[]) => Promise<void>;
   clearCustom: () => Promise<void>;
 };
 
@@ -83,6 +85,10 @@ export function createPoseRepository(
       return filterPoses(catalog(), query);
     },
 
+    listCustom() {
+      return [...customCatalog];
+    },
+
     getById(id) {
       return getPoseById(catalog(), id);
     },
@@ -125,6 +131,14 @@ export function createPoseRepository(
         throw new Error(`Custom pose not found: ${id}`);
       }
       customCatalog = customCatalog.filter((pose) => pose.id !== id);
+      await writeCustom(customCatalog);
+    },
+
+    async replaceCustom(poses) {
+      await this.ready();
+      customCatalog = asNormalizedPoses(poses)
+        .filter((pose) => isCustomPoseId(pose.id))
+        .map((pose) => ({ ...pose, custom: true }));
       await writeCustom(customCatalog);
     },
 
